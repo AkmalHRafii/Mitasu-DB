@@ -3,6 +3,7 @@ const errorHandler = require('../middlewares/errorHandler')
 const router = express.Router()
 const userRoutes = require("./userRoutes")
 const bookmarkRoutes = require("./bookmarkRoutes")
+const geminiRoutes = require("./geminiRoutes")
 
 
 router.get('/', (req, res) => {
@@ -11,6 +12,7 @@ router.get('/', (req, res) => {
 
 router.use("/user", userRoutes)
 router.use("/bookmark", bookmarkRoutes)
+router.use("/ai", geminiRoutes)
 
 router.use(errorHandler)
 
