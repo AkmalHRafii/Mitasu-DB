@@ -19,9 +19,9 @@ class BookmarkController {
 
     static async add(req, res, next) {
         try {
-            const { mal_id } = req.body
+            const { mal_id, title } = req.body
             const userId = req.user.id
-            let newBookmark = await Bookmark.create({ mal_id, UserId: userId })
+            let newBookmark = await Bookmark.create({ mal_id, title, UserId: userId })
             res.status(201).json({
                 newBookmark
             })

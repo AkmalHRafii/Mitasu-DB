@@ -50,13 +50,26 @@ describe('Bookmark Controller', () => {
                 .post('/bookmark')
                 .set('Authorization', `Bearer ${access_token}`)
                 .send({
-                    mal_id: 12345
+                    mal_id: 12345,
+                    title: 'Naruto'
                 });
 
             expect(response.status).toBe(201);
             expect(response.body).toHaveProperty('newBookmark');
             expect(response.body.newBookmark).toHaveProperty('mal_id', 12345);
+            expect(response.body.newBookmark).toHaveProperty('title', 'Naruto');
             expect(response.body.newBookmark).toHaveProperty('UserId', userId);
+        });
+
+        it('should fail to add a bookmark without title', async () => {
+            const response = await request(app)
+                .post('/bookmark')
+                .set('Authorization', `Bearer ${access_token}`)
+                .send({
+                    mal_id: 12345
+                });
+
+            expect(response.status).toBe(400);
         });
     });
 
@@ -71,6 +84,7 @@ describe('Bookmark Controller', () => {
             expect(Array.isArray(response.body.bookmarks)).toBe(true);
             expect(response.body.bookmarks.length).toBeGreaterThan(0);
             expect(response.body.bookmarks[0]).toHaveProperty('mal_id', 12345);
+            expect(response.body.bookmarks[0]).toHaveProperty('title', 'Naruto');
         });
     });
 
