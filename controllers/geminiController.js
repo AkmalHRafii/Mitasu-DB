@@ -1,12 +1,13 @@
 const { User, Bookmark } = require("../models")
 const { GoogleGenAI } = require("@google/genai")
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+
 
 class GeminiController {
 
     static async recommend(req, res, next) {
         try {
+            const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
             const userId = req.user.id
             const bookmarks = await Bookmark.findAll({ where: { UserId: userId } })
             const animeList = bookmarks.map(bookmark => bookmark.title).join(", ")
