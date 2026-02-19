@@ -5,7 +5,7 @@
 This project provides an API for user management, Google login, and managing favorite anime (based on MyAnimeList IDs) using Jikan API, with an AI-powered recommendation feature using Gemini API.
 
 ## Base URL
-
+https://mitasu-db-production.up.railway.app/
 
 ---
 
