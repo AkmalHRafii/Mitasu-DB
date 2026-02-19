@@ -1,6 +1,6 @@
-const {User, Bookmark} = require("../models")
+const { User, Bookmark } = require("../models")
 
-class BookmarkController{
+class BookmarkController {
     static async read(req, res, next) {
         try {
             const userId = req.user.id
@@ -19,9 +19,9 @@ class BookmarkController{
 
     static async add(req, res, next) {
         try {
-            const {mal_id} = req.body
+            const { mal_id } = req.body
             const userId = req.user.id
-            let newBookmark = await Bookmark.create({mal_id, UserId: userId})
+            let newBookmark = await Bookmark.create({ mal_id, UserId: userId })
             res.status(201).json({
                 newBookmark
             })
@@ -32,7 +32,7 @@ class BookmarkController{
 
     static async delete(req, res, next) {
         try {
-            const {id} = req.params
+            const { id } = req.params
             const userId = req.user.id
             let bookmark = await Bookmark.findOne({
                 where: {
@@ -40,9 +40,11 @@ class BookmarkController{
                     UserId: userId
                 }
             })
-            if(!bookmark) {
-                throw {name: "Not Found", statusCode: 404, message: "Not Found"}
+            if (!bookmark) {
+                throw { name: "Not Found", statusCode: 404, message: "Not Found" }
             }
+            await bookmark.destroy();
+            res.status(200).json({ message: "Bookmark deleted" });
         } catch (error) {
             next(error)
         }
