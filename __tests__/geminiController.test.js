@@ -2,17 +2,7 @@ const request = require('supertest');
 const { User, Bookmark } = require('../models');
 
 // Jest will pick up the mock from moduleNameMapper
-// We just need to import it to configure the mock implementation
-const { GoogleGenAI } = require("@google/genai");
-
-const mockGenerateContent = jest.fn();
-
-// Configure the mock
-GoogleGenAI.mockImplementation(() => ({
-    models: {
-        generateContent: mockGenerateContent
-    }
-}));
+const { GoogleGenerativeAI, mockGenerateContent, mockGetGenerativeModel } = require("@google/generative-ai");
 
 const app = require('../app');
 const { signToken } = require('../helpers/jwt');
@@ -26,6 +16,8 @@ const { queryInterface } = sequelize;
 beforeAll(async () => {
     // Reset mocks
     mockGenerateContent.mockReset();
+    mockGetGenerativeModel.mockClear();
+    GoogleGenerativeAI.mockClear();
 
     await queryInterface.bulkDelete('Bookmarks', null, {
         truncate: true,
@@ -76,14 +68,17 @@ describe('Gemini Controller', () => {
 
     describe('GET /ai/recommend', () => {
         it('should return recommendations successfully', async () => {
-            const mockResponseText = {
+            const mockResponseData = {
                 recommendations: ["Bleach", "Dragon Ball", "Hunter x Hunter"],
                 reasoning: "Because you like Naruto and One Piece"
             };
-            const mockResponseString = JSON.stringify(mockResponseText);
+            const mockResponseString = JSON.stringify(mockResponseData);
 
+            // Mock the chain: model.generateContent -> result.response.text()
             mockGenerateContent.mockResolvedValue({
-                text: mockResponseString
+                response: {
+                    text: () => mockResponseString
+                }
             });
 
             const response = await request(app)
@@ -91,9 +86,31 @@ describe('Gemini Controller', () => {
                 .set('Authorization', `Bearer ${access_token}`);
 
             expect(response.status).toBe(200);
-            expect(response.body).toHaveProperty('recommendations', mockResponseString);
+            expect(response.body).toHaveProperty('recommendations');
+            expect(response.body.recommendations).toEqual(expect.arrayContaining(["Bleach"]));
 
-            expect(GoogleGenAI).toHaveBeenCalledWith({ apiKey: process.env.GEMINI_API_KEY });
+            expect(GoogleGenerativeAI).toHaveBeenCalledWith(process.env.GEMINI_API_KEY);
+            expect(mockGetGenerativeModel).toHaveBeenCalledWith(expect.objectContaining({
+                model: "gemini-1.5-flash"
+            }));
+            expect(mockGenerateContent).toHaveBeenCalledWith(expect.stringContaining("Naruto, One Piece"));
+        });
+
+        it('should handle empty bookmarks', async () => {
+            // Create a new user with no bookmarks
+            const user2 = await User.create({
+                email: 'nobookmarks@example.com',
+                password: 'password123'
+            });
+            const token2 = signToken({ id: user2.id, email: user2.email });
+
+            const response = await request(app)
+                .get('/ai/recommend')
+                .set('Authorization', `Bearer ${token2}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body).toHaveProperty('recommendations', []);
+            expect(response.body).toHaveProperty('reasoning');
         });
 
         it('should handle errors from Gemini API', async () => {
@@ -105,7 +122,7 @@ describe('Gemini Controller', () => {
                 .set('Authorization', `Bearer ${access_token}`);
 
             expect(response.status).toBe(500);
-            expect(response.body).toHaveProperty('message');
+            expect(response.body).toHaveProperty('error', 'Gagal merekomendasikan anime.');
         });
     });
 });

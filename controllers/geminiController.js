@@ -1,5 +1,5 @@
 const { User, Bookmark } = require("../models")
-const { GoogleGenAI } = require("@google/genai")
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 
 
@@ -7,21 +7,44 @@ class GeminiController {
 
     static async recommend(req, res, next) {
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
-            const userId = req.user.id
-            const bookmarks = await Bookmark.findAll({ where: { UserId: userId } })
-            const animeList = bookmarks.map(bookmark => bookmark.title).join(", ")
-            const prompt = `I like the following works: ${animeList}. Please tell me 3 recommended anime similar to these. Please respond in JSON format with the following structure: { "recommendations": ["anime1", "anime2", "anime3"], "reasoning": "reasoning" }. Do not include any other text.`
-            const result = await ai.models.generateContent({
-                model: "gemini-3-flash-preview",
-                contents: prompt,
-            })
-            const text = result.text
-            res.status(200).json({
-                recommendations: text
-            })
+            const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+            const model = genAI.getGenerativeModel({
+                model: "gemini-1.5-flash",
+                generationConfig: {
+                    responseMimeType: "application/json",
+                }
+            });
+
+            const userId = req.user.id;
+            const bookmarks = await Bookmark.findAll({ where: { UserId: userId } });
+
+            if (!bookmarks || bookmarks.length === 0) {
+                return res.status(200).json({
+                    recommendations: [],
+                    reasoning: "Bookmark masih kosong. Tidak bisa merekomendasikan anime."
+                });
+            }
+
+            const animeList = bookmarks.map(bookmark => bookmark.title).join(", ");
+
+            const prompt = `I like the following works: ${animeList}. 
+        Please tell me 3 recommended anime similar to these. 
+        Output in the following JSON format: 
+        { "recommendations": ["title1", "title2", "title3"], "reasoning": "string" }`;
+
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+
+
+            const jsonResponse = JSON.parse(text);
+
+
+            res.status(200).json(jsonResponse);
+
         } catch (error) {
-            next(error)
+            console.error("Gemini API Error:", error);
+            res.status(500).json({ error: "Gagal merekomendasikan anime." });
         }
     }
 }
