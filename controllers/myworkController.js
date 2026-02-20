@@ -26,6 +26,24 @@ class MyworkController {
         }
     }
 
+    static async findOne(req, res, next) {
+        try {
+            const { id } = req.params;
+            const mywork = await Mywork.findOne({
+                where: {
+                    id: id,
+                    UserId: req.user.id
+                }
+            });
+            if (!mywork) {
+                throw { name: "Not Found", statusCode: 404, message: "Not Found" };
+            }
+            res.status(200).json(mywork);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static async update(req, res, next) {
         try {
             const { id } = req.params;
