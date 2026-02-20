@@ -29,10 +29,11 @@ class MyworkController {
     static async findOne(req, res, next) {
         try {
             const { id } = req.params;
+            const UserId = req.user.id;
             const mywork = await Mywork.findOne({
                 where: {
                     id: id,
-                    UserId: req.user.id
+                    UserId: UserId
                 }
             });
             if (!mywork) {
@@ -48,10 +49,11 @@ class MyworkController {
         try {
             const { id } = req.params;
             const { title, imageUrl } = req.body;
+            const UserId = req.user.id;
             const mywork = await Mywork.findOne({
                 where: {
                     id: id,
-                    UserId: req.user.id
+                    UserId: UserId
                 }
             });
             if (!mywork) {
@@ -69,10 +71,11 @@ class MyworkController {
     static async delete(req, res, next) {
         try {
             const { id } = req.params;
+            const UserId = req.user.id;
             const mywork = await Mywork.findOne({
                 where: {
                     id: id,
-                    UserId: req.user.id
+                    UserId: UserId
                 }
             });
             if (!mywork) {
@@ -88,6 +91,7 @@ class MyworkController {
     static async upload(req, res, next) {
         try {
             const { id } = req.params
+            const UserId = req.user.id;
             const result = await client.uploadFile(req.file.buffer, {
                 fileName: req.file.originalName,
                 contentType: req.file.mimetype
@@ -98,7 +102,7 @@ class MyworkController {
             const mywork = await Mywork.findOne({
                 where: {
                     id: id,
-                    UserId: req.user.id
+                    UserId: UserId
                 }
             });
             if (!mywork) {
