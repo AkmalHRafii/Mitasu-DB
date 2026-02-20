@@ -1,0 +1,162 @@
+  console.log
+    [dotenv@17.3.1] injecting env (5) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+
+      at _log (node_modules/dotenv/lib/main.js:139:11)
+
+  console.log
+    Executing (default): TRUNCATE "Myworks" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): TRUNCATE "Users" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): INSERT INTO "Users" ("id","email","password","createdAt","updatedAt") VALUES (DEFAULT,$1,$2,$3,$4) RETURNING "id","email","password","userName","createdAt","updatedAt";
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): TRUNCATE "Myworks" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): TRUNCATE "Users" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+FAIL __tests__/myworkController.test.js
+  Mywork Controller
+    POST /mywork
+      × should create a new mywork successfully
+      × should fail if unauthenticated
+    GET /mywork
+      × should find all myworks for the user
+    PUT /mywork/:id
+      × should update a mywork successfully
+      × should return 404 if mywork not found
+    DELETE /mywork/:id
+      × should delete a mywork successfully
+    POST /mywork/upload/:id
+      × should upload a file and update mywork successfully
+
+  ● Mywork Controller › POST /mywork › should create a new mywork successfully
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/myworkController.test.js:45:20)
+
+  ● Mywork Controller › POST /mywork › should fail if unauthenticated
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/myworkController.test.js:45:20)
+
+  ● Mywork Controller › GET /mywork › should find all myworks for the user
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/myworkController.test.js:45:20)
+
+  ● Mywork Controller › PUT /mywork/:id › should update a mywork successfully
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/myworkController.test.js:45:20)
+
+  ● Mywork Controller › PUT /mywork/:id › should return 404 if mywork not found
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/myworkController.test.js:45:20)
+
+  ● Mywork Controller › DELETE /mywork/:id › should delete a mywork successfully
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/myworkController.test.js:45:20)
+
+  ● Mywork Controller › POST /mywork/upload/:id › should upload a file and update mywork successfully
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/myworkController.test.js:45:20)
+
+Test Suites: 1 failed, 1 total
+Tests:       7 failed, 7 total
+Snapshots:   0 total
+Time:        0.825 s, estimated 2 s
+Ran all test suites matching __tests__/myworkController.test.js.
