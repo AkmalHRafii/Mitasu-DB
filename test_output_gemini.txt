@@ -1,0 +1,73 @@
+  console.log
+    [dotenv@17.3.1] injecting env (3) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib/main.js:139:11)
+
+  console.log
+    Executing (default): TRUNCATE "Bookmarks" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): TRUNCATE "Users" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): INSERT INTO "Users" ("id","email","password","createdAt","updatedAt") VALUES (DEFAULT,$1,$2,$3,$4) RETURNING "id","email","password","userName","createdAt","updatedAt";
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): TRUNCATE "Bookmarks" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+  console.log
+    Executing (default): TRUNCATE "Users" RESTART IDENTITY CASCADE
+
+      at Sequelize.log (node_modules/sequelize/src/sequelize.js:1281:15)
+
+FAIL __tests__/geminiController.test.js
+  Gemini Controller
+    GET /ai/recommend
+      × should return recommendations successfully (1 ms)
+      × should handle errors from Gemini API
+
+  ● Gemini Controller › GET /ai/recommend › should return recommendations successfully
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/geminiController.test.js:46:20)
+
+  ● Gemini Controller › GET /ai/recommend › should handle errors from Gemini API
+
+    secretOrPrivateKey must have a value
+
+    [0m [90m 3 |[39m
+     [90m 4 |[39m [36mfunction[39m signToken(payload) {
+    [31m[1m>[22m[39m[90m 5 |[39m     [36mreturn[39m jwt[33m.[39msign(payload[33m,[39m secretKey)
+     [90m   |[39m                [31m[1m^[22m[39m
+     [90m 6 |[39m }
+     [90m 7 |[39m
+     [90m 8 |[39m [36mfunction[39m verifyToken(token) {[0m
+
+      at Object.module.exports [as sign] (node_modules/jsonwebtoken/sign.js:111:20)
+      at sign (helpers/jwt.js:5:16)
+      at Object.signToken (__tests__/geminiController.test.js:46:20)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 2 total
+Snapshots:   0 total
+Time:        1.132 s, estimated 2 s
+Ran all test suites matching __tests__/geminiController.test.js.

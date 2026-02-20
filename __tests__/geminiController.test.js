@@ -1,23 +1,21 @@
 const request = require('supertest');
-const { signToken } = require('../helpers/jwt');
 const { User, Bookmark } = require('../models');
 
-// Mock GoogleGenerativeAI BEFORE requiring app
+// Jest will pick up the mock from moduleNameMapper
+// We just need to import it to configure the mock implementation
+const { GoogleGenAI } = require("@google/genai");
+
 const mockGenerateContent = jest.fn();
 
-jest.mock("@google/genai", () => {
-    return {
-        GoogleGenAI: jest.fn().mockImplementation(() => ({
-            models: {
-                generateContent: mockGenerateContent
-            }
-        }))
-    };
-});
+// Configure the mock
+GoogleGenAI.mockImplementation(() => ({
+    models: {
+        generateContent: mockGenerateContent
+    }
+}));
 
-// Now require app, which will load the controller and use the mock
 const app = require('../app');
-const { GoogleGenAI } = require("@google/genai");
+const { signToken } = require('../helpers/jwt');
 
 let access_token;
 let userId;
@@ -26,6 +24,9 @@ const { sequelize } = require('../models');
 const { queryInterface } = sequelize;
 
 beforeAll(async () => {
+    // Reset mocks
+    mockGenerateContent.mockReset();
+
     await queryInterface.bulkDelete('Bookmarks', null, {
         truncate: true,
         cascade: true,
@@ -72,10 +73,6 @@ afterAll(async () => {
 });
 
 describe('Gemini Controller', () => {
-    beforeEach(() => {
-        // Reset mocks
-        mockGenerateContent.mockUpdated = true;
-    });
 
     describe('GET /ai/recommend', () => {
         it('should return recommendations successfully', async () => {
@@ -86,9 +83,7 @@ describe('Gemini Controller', () => {
             const mockResponseString = JSON.stringify(mockResponseText);
 
             mockGenerateContent.mockResolvedValue({
-                response: {
-                    text: () => mockResponseString
-                }
+                text: mockResponseString
             });
 
             const response = await request(app)
@@ -97,9 +92,11 @@ describe('Gemini Controller', () => {
 
             expect(response.status).toBe(200);
             expect(response.body).toHaveProperty('recommendations', mockResponseString);
+
+            expect(GoogleGenAI).toHaveBeenCalledWith({ apiKey: process.env.GEMINI_API_KEY });
         });
 
-        it('should handle errors from Gemini API', async () => { // Fixed typo
+        it('should handle errors from Gemini API', async () => {
             const errorMessage = "Gemini API Error";
             mockGenerateContent.mockRejectedValue(new Error(errorMessage));
 
